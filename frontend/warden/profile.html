@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warden Profile - HMS</title>
+  <link rel="stylesheet" href="../assets/css/hms-layout.css">
+  <link rel="stylesheet" href="css/warden.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-page-title="Profile">
+
+  <div class="app-layout">
+    <aside id="app-sidebar" class="sidebar"></aside>
+
+    <div class="main-wrapper">
+      <header id="app-topbar" class="topbar"></header>
+
+      <main class="content-body" id="profile-content">
+        <div class="loading-spinner">
+          <p>Loading warden profile...</p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../assets/js/modules/api.js"></script>
+  <script src="../assets/js/modules/auth.js"></script>
+  <script src="../assets/js/modules/sidebar.js"></script>
+  <script src="../assets/js/modules/toast.js"></script>
+  <script src="../assets/js/modules/validator.js"></script>
+  
+  <script src="js/warden.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

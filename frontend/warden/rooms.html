@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Room Management - HMS</title>
+  <link rel="stylesheet" href="../assets/css/hms-layout.css">
+  <link rel="stylesheet" href="css/warden.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-page-title="Rooms">
+
+  <div class="app-layout">
+    <aside id="app-sidebar" class="sidebar"></aside>
+
+    <div class="main-wrapper">
+      <header id="app-topbar" class="topbar"></header>
+
+      <main class="content-body">
+        <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h1>Room Management</h1>
+            <p>Monitor room allocations, capacities, and occupant details.</p>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-sm room-filter-btn" data-status="ALL">All Rooms</option>
+            <button class="btn btn-secondary btn-sm room-filter-btn" data-status="AVAILABLE">Available</button>
+            <button class="btn btn-secondary btn-sm room-filter-btn" data-status="PARTIALLY_OCCUPIED">Partially Occupied</button>
+            <button class="btn btn-secondary btn-sm room-filter-btn" data-status="FULL">Full</button>
+            <button class="btn btn-secondary btn-sm room-filter-btn" data-status="MAINTENANCE">Maintenance</button>
+          </div>
+        </div>
+
+        <!-- Occupancy Summary Card -->
+        <div class="card" id="occupancy-summary-card"></div>
+
+        <!-- Rooms Table Card -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="bed"></i> Hostel Rooms</div>
+          </div>
+
+          <div id="rooms-container">
+            <div class="loading-spinner">
+              <p>Loading rooms information...</p>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Room Occupants Modal -->
+  <div id="occupants-modal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Room Occupant Details</div>
+        <button class="modal-close" onclick="closeModal('occupants-modal')">&times;</button>
+      </div>
+      <div class="modal-body" id="occupants-modal-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('occupants-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Assign / Change Room Modal -->
+  <div id="assign-room-modal" class="modal-backdrop">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <div class="modal-title" id="assign-modal-title">Assign Room</div>
+        <button class="modal-close" onclick="closeModal('assign-room-modal')">&times;</button>
+      </div>
+      <form id="assign-room-form" novalidate>
+        <div class="modal-body">
+          
+          <!-- Student Selection -->
+          <div class="form-group">
+            <label class="form-label" for="assign-student-select">Select Student *</label>
+            <select id="assign-student-select" class="form-control" required>
+              <option value="">-- Select Student --</option>
+            </select>
+          </div>
+
+          <!-- Student Info Details Card -->
+          <div id="selected-student-info" style="display: none; margin-bottom: 1.25rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--primary-light);"></div>
+
+          <!-- Room Selection -->
+          <div class="form-group">
+            <label class="form-label" for="assign-room-select">Select Room *</label>
+            <select id="assign-room-select" class="form-control" required>
+              <option value="">-- Select Available Room --</option>
+            </select>
+          </div>
+
+          <!-- Room Info Details Card -->
+          <div id="selected-room-info" style="display: none; margin-bottom: 1.25rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--secondary-bg);"></div>
+
+          <!-- Change Room Confirmation Alert -->
+          <div id="change-room-alert" style="display: none; margin-bottom: 1rem; padding: 0.85rem 1rem; border-radius: 8px; background-color: var(--warning-bg); border: 1px solid var(--warning); color: #92400e; font-size: 0.875rem;"></div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('assign-room-modal')">Cancel</button>
+          <button type="submit" id="submit-assign-room-btn" class="btn btn-primary" disabled>
+            <i data-lucide="user-check"></i>
+            <span id="assign-btn-text">Assign Room</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../assets/js/modules/api.js"></script>
+  <script src="../assets/js/modules/auth.js"></script>
+  <script src="../assets/js/modules/sidebar.js"></script>
+  <script src="../assets/js/modules/toast.js"></script>
+  <script src="../assets/js/modules/validator.js"></script>
+  
+  <script src="js/warden.js"></script>
+  <script src="js/rooms.js"></script>
+
+  <script>
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('show');
+    }
+  </script>
+</body>
+</html>

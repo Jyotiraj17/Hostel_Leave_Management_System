@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Room Management - HMS</title>
+  <link rel="stylesheet" href="../assets/css/hms-layout.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-page-title="Rooms">
+
+  <div class="app-layout">
+    <aside id="app-sidebar" class="sidebar"></aside>
+
+    <div class="main-wrapper">
+      <header id="app-topbar" class="topbar"></header>
+
+      <main class="content-body">
+        <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h1>Room Management</h1>
+            <p>Add, monitor, and manage hostel rooms and capacities.</p>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+            <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+              <button class="btn btn-primary btn-sm room-filter-btn" data-status="ALL">All Rooms</button>
+              <button class="btn btn-secondary btn-sm room-filter-btn" data-status="AVAILABLE">Available</button>
+              <button class="btn btn-secondary btn-sm room-filter-btn" data-status="PARTIALLY_OCCUPIED">Partially Occupied</button>
+              <button class="btn btn-secondary btn-sm room-filter-btn" data-status="FULL">Full</button>
+              <button class="btn btn-secondary btn-sm room-filter-btn" data-status="MAINTENANCE">Maintenance</button>
+            </div>
+
+            <button class="btn btn-primary" id="open-add-room-btn">
+              <i data-lucide="plus"></i> Add New Room
+            </button>
+          </div>
+        </div>
+
+        <div class="card" id="occupancy-summary-card"></div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="bed"></i> Hostel Rooms</div>
+          </div>
+
+          <div id="rooms-container">
+            <div class="loading-spinner">
+              <p>Loading rooms information...</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Add Room Modal -->
+  <div id="add-room-modal" class="modal-backdrop">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-title">Add New Room</div>
+        <button class="modal-close" onclick="closeModal('add-room-modal')">&times;</button>
+      </div>
+      <form id="add-room-form" novalidate>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="add-r-number">Room Number *</label>
+            <input type="text" id="add-r-number" class="form-control" placeholder="e.g. 101" required />
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="add-r-hostel">Hostel Name *</label>
+              <input type="text" id="add-r-hostel" class="form-control" placeholder="e.g. Boys Hostel A" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="add-r-block">Block *</label>
+              <input type="text" id="add-r-block" class="form-control" placeholder="e.g. A" required />
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="add-r-floor">Floor Number *</label>
+              <input type="number" id="add-r-floor" class="form-control" value="1" min="0" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="add-r-capacity">Capacity (Beds) *</label>
+              <input type="number" id="add-r-capacity" class="form-control" value="4" min="1" required />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('add-room-modal')">Cancel</button>
+          <button type="submit" id="save-room-btn" class="btn btn-primary">Add Room</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Room Modal -->
+  <div id="edit-room-modal" class="modal-backdrop">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-title">Edit Room Configuration</div>
+        <button class="modal-close" onclick="closeModal('edit-room-modal')">&times;</button>
+      </div>
+      <form id="edit-room-form" novalidate>
+        <input type="hidden" id="edit-room-id" />
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="edit-r-capacity">Bed Capacity</label>
+            <input type="number" id="edit-r-capacity" class="form-control" min="1" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="edit-r-floor">Floor Number</label>
+            <input type="number" id="edit-r-floor" class="form-control" min="0" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="edit-r-status">Room Status</label>
+            <select id="edit-r-status" class="form-control">
+              <option value="Available">Available</option>
+              <option value="Partially Occupied">Partially Occupied</option>
+              <option value="Full">Full</option>
+              <option value="Maintenance">Maintenance</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('edit-room-modal')">Cancel</button>
+          <button type="submit" id="update-room-btn" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Assign / Change Room Modal -->
+  <div id="assign-room-modal" class="modal-backdrop">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <div class="modal-title" id="assign-modal-title">Assign Room</div>
+        <button class="modal-close" onclick="closeModal('assign-room-modal')">&times;</button>
+      </div>
+      <form id="assign-room-form" novalidate>
+        <div class="modal-body">
+          
+          <!-- Student Selection -->
+          <div class="form-group">
+            <label class="form-label" for="assign-student-select">Select Student *</label>
+            <select id="assign-student-select" class="form-control" required>
+              <option value="">-- Select Student --</option>
+            </select>
+          </div>
+
+          <!-- Student Info Details Card -->
+          <div id="selected-student-info" style="display: none; margin-bottom: 1.25rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--primary-light);"></div>
+
+          <!-- Room Selection -->
+          <div class="form-group">
+            <label class="form-label" for="assign-room-select">Select Room *</label>
+            <select id="assign-room-select" class="form-control" required>
+              <option value="">-- Select Available Room --</option>
+            </select>
+          </div>
+
+          <!-- Room Info Details Card -->
+          <div id="selected-room-info" style="display: none; margin-bottom: 1.25rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--secondary-bg);"></div>
+
+          <!-- Change Room Confirmation Alert -->
+          <div id="change-room-alert" style="display: none; margin-bottom: 1rem; padding: 0.85rem 1rem; border-radius: 8px; background-color: var(--warning-bg); border: 1px solid var(--warning); color: #92400e; font-size: 0.875rem;"></div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('assign-room-modal')">Cancel</button>
+          <button type="submit" id="submit-assign-room-btn" class="btn btn-primary" disabled>
+            <i data-lucide="user-check"></i>
+            <span id="assign-btn-text">Assign Room</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../assets/js/modules/api.js"></script>
+  <script src="../assets/js/modules/auth.js"></script>
+  <script src="../assets/js/modules/sidebar.js"></script>
+  <script src="../assets/js/modules/toast.js"></script>
+  <script src="../assets/js/modules/validator.js"></script>
+  
+  <script src="js/admin.js"></script>
+  <script src="js/rooms.js"></script>
+
+  <script>
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('show');
+    }
+
+    document.getElementById('open-add-room-btn').addEventListener('click', () => {
+      document.getElementById('add-room-modal').classList.add('show');
+    });
+  </script>
+</body>
+</html>

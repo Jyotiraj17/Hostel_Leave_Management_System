@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complaints Management - HMS</title>
+  <link rel="stylesheet" href="../assets/css/hms-layout.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-page-title="Complaints">
+
+  <div class="app-layout">
+    <aside id="app-sidebar" class="sidebar"></aside>
+
+    <div class="main-wrapper">
+      <header id="app-topbar" class="topbar"></header>
+
+      <main class="content-body">
+        <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h1>Complaints Management</h1>
+            <p>Monitor all submitted student complaints and resolutions.</p>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-sm complaint-filter-btn" data-status="ALL">All</button>
+            <button class="btn btn-secondary btn-sm complaint-filter-btn" data-status="PENDING">Pending</button>
+            <button class="btn btn-secondary btn-sm complaint-filter-btn" data-status="IN_PROGRESS">In Progress</button>
+            <button class="btn btn-secondary btn-sm complaint-filter-btn" data-status="RESOLVED">Resolved</button>
+            <button class="btn btn-secondary btn-sm complaint-filter-btn" data-status="REJECTED">Rejected</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="alert-circle"></i> Hostel Complaints</div>
+          </div>
+
+          <div id="complaints-container">
+            <div class="loading-spinner">
+              <p>Loading complaints list...</p>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="../assets/js/modules/api.js"></script>
+  <script src="../assets/js/modules/auth.js"></script>
+  <script src="../assets/js/modules/sidebar.js"></script>
+  <script src="../assets/js/modules/toast.js"></script>
+  <script src="../assets/js/modules/validator.js"></script>
+  
+  <script src="js/admin.js"></script>
+  <script src="js/complaints.js"></script>
+</body>
+</html>

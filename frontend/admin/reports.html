@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Reports - HMS</title>
+  <link rel="stylesheet" href="../assets/css/hms-layout.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-page-title="Reports">
+
+  <div class="app-layout">
+    <aside id="app-sidebar" class="sidebar"></aside>
+
+    <div class="main-wrapper">
+      <header id="app-topbar" class="topbar"></header>
+
+      <main class="content-body">
+        <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h1>System Reports</h1>
+            <p>Generate and view system reports for hostel analytics.</p>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-sm report-type-btn" data-type="students">Student Report</button>
+            <button class="btn btn-secondary btn-sm report-type-btn" data-type="wardens">Warden Report</button>
+            <button class="btn btn-secondary btn-sm report-type-btn" data-type="rooms">Room Occupancy Report</button>
+            <button class="btn btn-secondary btn-sm report-type-btn" data-type="leaves">Leave Report</button>
+            <button class="btn btn-secondary btn-sm report-type-btn" data-type="complaints">Complaint Report</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div id="report-container">
+            <div class="loading-spinner">
+              <p>Loading report data...</p>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="../assets/js/modules/api.js"></script>
+  <script src="../assets/js/modules/auth.js"></script>
+  <script src="../assets/js/modules/sidebar.js"></script>
+  <script src="../assets/js/modules/toast.js"></script>
+  <script src="../assets/js/modules/validator.js"></script>
+  
+  <script src="js/admin.js"></script>
+  <script src="js/reports.js"></script>
+</body>
+</html>

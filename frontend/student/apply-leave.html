@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apply Leave - HMS</title>
+  <link rel="stylesheet" href="../assets/css/hms-layout.css">
+  <link rel="stylesheet" href="css/student.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-page-title="Apply Leave">
+
+  <div class="app-layout">
+    <aside id="app-sidebar" class="sidebar"></aside>
+
+    <div class="main-wrapper">
+      <header id="app-topbar" class="topbar"></header>
+
+      <main class="content-body">
+        <div class="page-header">
+          <h1>Apply for Leave</h1>
+          <p>Submit a new leave application to your warden for review.</p>
+        </div>
+
+        <div class="card" style="max-width: 800px;">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="calendar-plus"></i> Leave Application Form</div>
+          </div>
+
+          <form id="leave-apply-form" novalidate>
+            <div class="form-grid">
+              
+              <div class="form-group">
+                <label class="form-label" for="leaveType">Leave Type *</label>
+                <select id="leaveType" name="leaveType" class="form-control" required>
+                  <option value="">Select Leave Type</option>
+                  <option value="Home Leave">Home Leave</option>
+                  <option value="Medical Leave">Medical Leave</option>
+                  <option value="Casual Leave">Casual Leave</option>
+                  <option value="Emergency Leave">Emergency Leave</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="startDate">Start Date *</label>
+                <input type="date" id="startDate" name="startDate" class="form-control" required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="endDate">End Date *</label>
+                <input type="date" id="endDate" name="endDate" class="form-control" required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="destination">Destination *</label>
+                <input type="text" id="destination" name="destination" class="form-control" placeholder="City / Hometown" required />
+              </div>
+
+              <div class="form-group" style="grid-column: 1 / -1;">
+                <label class="form-label" for="leaveAddress">Address During Leave *</label>
+                <textarea id="leaveAddress" name="leaveAddress" class="form-control" rows="2" placeholder="Full address during leave period" required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="emergencyContact">Emergency Contact Number *</label>
+                <input type="text" id="emergencyContact" name="emergencyContact" class="form-control" placeholder="Guardian / Parent phone" required />
+              </div>
+
+              <div class="form-group" style="grid-column: 1 / -1;">
+                <label class="form-label" for="reason">Reason for Leave *</label>
+                <textarea id="reason" name="reason" class="form-control" rows="3" placeholder="Detailed reason for your leave request..." required></textarea>
+              </div>
+
+              <div class="form-group" style="grid-column: 1 / -1;">
+                <label class="form-label" for="remarks">Additional Remarks (Optional)</label>
+                <input type="text" id="remarks" name="remarks" class="form-control" placeholder="Any additional information..." />
+              </div>
+
+            </div>
+
+            <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: flex-end;">
+              <a href="/student/leave-history.html" class="btn btn-secondary">Cancel</a>
+              <button type="submit" id="submit-leave-btn" class="btn btn-primary">
+                <i data-lucide="send"></i>
+                <span>Submit Leave Application</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="../assets/js/modules/api.js"></script>
+  <script src="../assets/js/modules/auth.js"></script>
+  <script src="../assets/js/modules/sidebar.js"></script>
+  <script src="../assets/js/modules/toast.js"></script>
+  <script src="../assets/js/modules/validator.js"></script>
+  
+  <script src="js/student.js"></script>
+  <script src="js/leaves.js"></script>
+</body>
+</html>

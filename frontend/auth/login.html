@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - HMS Hostel Management System</title>
+  <link rel="stylesheet" href="../assets/css/design-system.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="auth-page">
+
+  <div class="auth-container">
+    
+    <!-- LEFT PANEL (Hostel Themed Design) -->
+    <div class="auth-hero">
+      <div class="hero-brand">HMS / Hostel Management System</div>
+      <svg class="auth-hero-graphic" viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 140H180V150H20V140Z" fill="#334155"/>
+        <path d="M40 70L100 25L160 70V140H40V70Z" fill="#1e293b" stroke="#38bdf8" stroke-width="3"/>
+        <path d="M85 140V105H115V140H85Z" fill="#38bdf8"/>
+        <rect x="55" y="80" width="20" height="20" rx="3" fill="#64748b"/>
+        <rect x="125" y="80" width="20" height="20" rx="3" fill="#64748b"/>
+        <rect x="90" y="55" width="20" height="20" rx="3" fill="#fbbf24"/>
+        <path d="M100 15L105 25H95L100 15Z" fill="#ef4444"/>
+      </svg>
+      <h2>Welcome to<br>Hostel Management System</h2>
+      <p>Smart. Simple. Secure.</p>
+    </div>
+
+    <!-- RIGHT PANEL (Login Form) -->
+    <div class="login-panel">
+      <div class="login-box">
+
+        <div class="login-header">
+          <h1>Login</h1>
+          <p>Sign in to your account</p>
+        </div>
+
+        <div id="alert-error" class="alert alert-error"></div>
+
+        <form id="login-form" class="login-form" novalidate>
+          
+          <div class="form-group">
+            <label for="email">Email / Gmail</label>
+            <input 
+              type="email" 
+              id="email" 
+              class="form-input" 
+              placeholder="Enter your email" 
+              required 
+              autocomplete="email"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="password-wrapper">
+              <input 
+                type="password" 
+                id="password" 
+                class="form-input" 
+                placeholder="Enter your password" 
+                required
+                autocomplete="current-password"
+              >
+              <button type="button" class="toggle-password" id="toggle-password-btn" aria-label="Toggle password visibility">
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="login-options">
+            <label class="remember-me">
+              <input type="checkbox" id="remember-me">
+              <span>Remember me</span>
+            </label>
+            <a href="forgot-password.html" class="forgot-link">Forgot Password?</a>
+          </div>
+
+          <button type="submit" id="login-btn" class="login-button btn btn-primary">
+            <span>Login</span>
+          </button>
+          
+        </form>
+
+        <div class="contact-admin">
+          Don't have an account? <a href="#" onclick="alert('Please contact your hostel administrator to create an account.')">Contact Admin</a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../assets/js/modules/api.js"></script>
+  <script src="../assets/js/modules/auth.js"></script>
+  <script src="../assets/js/modules/toast.js"></script>
+  <script src="../assets/js/modules/validator.js"></script>
+  
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Guard check: redirect if already logged in
+    if (auth.isLoggedIn()) {
+      const user = auth.getUser();
+      if (user && user.role) {
+        auth.redirectDashboard(user.role);
+      }
+    }
+
+    const loginForm = document.getElementById('login-form');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginBtn = document.getElementById('login-btn');
+    const alertError = document.getElementById('alert-error');
+    const togglePasswordBtn = document.getElementById('toggle-password-btn');
+
+    // Toggle Password Visibility
+    togglePasswordBtn.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      
+      const icon = togglePasswordBtn.querySelector('i');
+      if (type === 'text') {
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      lucide.createIcons();
+    });
+
+    // Form Submission Handler
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertError.classList.remove('alert-visible');
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      // Client-side Validation
+      if (!validator.isNotEmpty(email)) {
+        showError('Please enter your email address.');
+        emailInput.focus();
+        return;
+      }
+
+      if (!validator.isValidEmail(email)) {
+        showError('Please enter a valid email address.');
+        emailInput.focus();
+        return;
+      }
+
+      if (!validator.isNotEmpty(password)) {
+        showError('Please enter your password.');
+        passwordInput.focus();
+        return;
+      }
+
+      // API POST /api/auth/login
+      loginBtn.disabled = true;
+      loginBtn.querySelector('span').textContent = 'Authenticating...';
+
+      try {
+        const response = await api.post('/auth/login', { email, password });
+        
+        if (response.success) {
+          toast.success('Login successful! Redirecting...');
+          auth.setSession(response.token, response.user);
+
+          setTimeout(() => {
+            auth.redirectDashboard(response.user.role);
+          }, 600);
+        } else {
+          showError(response.message || 'Invalid credentials');
+        }
+      } catch (err) {
+        showError(err.message || 'Invalid credentials or server unavailable.');
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.querySelector('span').textContent = 'Login';
+      }
+    });
+
+    function showError(msg) {
+      alertError.textContent = msg;
+      alertError.classList.add('alert-visible');
+    }
+  </script>
+</body>
+</html>

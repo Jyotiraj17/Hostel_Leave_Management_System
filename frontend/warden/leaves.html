@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leave Requests - HMS</title>
+  <link rel="stylesheet" href="../assets/css/hms-layout.css">
+  <link rel="stylesheet" href="css/warden.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-page-title="Leave Requests">
+
+  <div class="app-layout">
+    <aside id="app-sidebar" class="sidebar"></aside>
+
+    <div class="main-wrapper">
+      <header id="app-topbar" class="topbar"></header>
+
+      <main class="content-body">
+        <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h1>Leave Requests</h1>
+            <p>Review and process student leave applications.</p>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-sm leave-filter-btn" data-status="ALL">All</button>
+            <button class="btn btn-secondary btn-sm leave-filter-btn" data-status="PENDING">Pending</button>
+            <button class="btn btn-secondary btn-sm leave-filter-btn" data-status="APPROVED">Approved</button>
+            <button class="btn btn-secondary btn-sm leave-filter-btn" data-status="REJECTED">Rejected</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="calendar"></i> Leave Applications</div>
+          </div>
+
+          <div id="leaves-container">
+            <div class="loading-spinner">
+              <p>Loading leave applications...</p>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- View Leave Modal -->
+  <div id="leave-view-modal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Leave Request Details</div>
+        <button class="modal-close" onclick="closeModal('leave-view-modal')">&times;</button>
+      </div>
+      <div class="modal-body" id="leave-view-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('leave-view-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Modal (Approve / Reject) -->
+  <div id="leave-action-modal" class="modal-backdrop">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-title" id="action-modal-title">Process Leave Request</div>
+        <button class="modal-close" onclick="closeModal('leave-action-modal')">&times;</button>
+      </div>
+      <form id="leave-action-form">
+        <input type="hidden" id="action-leave-id" />
+        <input type="hidden" id="action-type" />
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="action-remarks">Warden Remarks / Reason *</label>
+            <textarea id="action-remarks" class="form-control" rows="3" placeholder="Enter remarks or reason for decision..." required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('leave-action-modal')">Cancel</button>
+          <button type="submit" id="submit-action-btn" class="btn btn-primary">Submit Decision</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../assets/js/modules/api.js"></script>
+  <script src="../assets/js/modules/auth.js"></script>
+  <script src="../assets/js/modules/sidebar.js"></script>
+  <script src="../assets/js/modules/toast.js"></script>
+  <script src="../assets/js/modules/validator.js"></script>
+  
+  <script src="js/warden.js"></script>
+  <script src="js/leaves.js"></script>
+
+  <script>
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('show');
+    }
+
+    document.getElementById('leave-action-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const leaveId = document.getElementById('action-leave-id').value;
+      const type = document.getElementById('action-type').value;
+      const wardenRemarks = document.getElementById('action-remarks').value.trim();
+
+      if (!wardenRemarks && type === 'REJECT') {
+        toast.error('Remarks/Reason are required when rejecting a leave request.');
+        return;
+      }
+
+      const btn = document.getElementById('submit-action-btn');
+      btn.disabled = true;
+
+      try {
+        const endpoint = `/warden/leaves/${leaveId}/${type === 'APPROVE' ? 'approve' : 'reject'}`;
+        const res = await api.patch(endpoint, { wardenRemarks });
+
+        if (res.success) {
+          toast.success(`Leave request ${type === 'APPROVE' ? 'approved' : 'rejected'} successfully.`);
+          closeModal('leave-action-modal');
+          await loadLeaveRequests();
+        } else {
+          toast.error(res.message || 'Failed to process request.');
+        }
+      } catch (err) {
+        toast.error(err.message || 'Error processing leave request.');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

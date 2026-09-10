@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Announcements - HMS</title>
+  <link rel="stylesheet" href="../assets/css/hms-layout.css">
+  <link rel="stylesheet" href="css/student.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-page-title="Announcements">
+
+  <div class="app-layout">
+    <aside id="app-sidebar" class="sidebar"></aside>
+
+    <div class="main-wrapper">
+      <header id="app-topbar" class="topbar"></header>
+
+      <main class="content-body">
+        <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h1>Hostel Announcements</h1>
+            <p>Stay updated with notices from Warden and Administration.</p>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-sm announcement-filter-btn" data-priority="ALL">All</button>
+            <button class="btn btn-secondary btn-sm announcement-filter-btn" data-priority="URGENT">Urgent</button>
+            <button class="btn btn-secondary btn-sm announcement-filter-btn" data-priority="IMPORTANT">Important</button>
+            <button class="btn btn-secondary btn-sm announcement-filter-btn" data-priority="NORMAL">Normal</button>
+          </div>
+        </div>
+
+        <div id="announcements-container">
+          <div class="loading-spinner">
+            <p>Loading active announcements...</p>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="../assets/js/modules/api.js"></script>
+  <script src="../assets/js/modules/auth.js"></script>
+  <script src="../assets/js/modules/sidebar.js"></script>
+  <script src="../assets/js/modules/toast.js"></script>
+  <script src="../assets/js/modules/validator.js"></script>
+  
+  <script src="js/student.js"></script>
+  <script src="js/announcements.js"></script>
+</body>
+</html>

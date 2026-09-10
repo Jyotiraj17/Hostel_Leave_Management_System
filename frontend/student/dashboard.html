@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - HMS</title>
+  <link rel="stylesheet" href="../assets/css/hms-layout.css">
+  <link rel="stylesheet" href="css/student.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-page-title="Dashboard">
+
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside id="app-sidebar" class="sidebar"></aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <!-- Topbar -->
+      <header id="app-topbar" class="topbar"></header>
+
+      <!-- Content Body -->
+      <main class="content-body" id="dashboard-content">
+        <div class="loading-spinner">
+          <p>Loading dashboard overview...</p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Shared Modules -->
+  <script src="../assets/js/modules/api.js"></script>
+  <script src="../assets/js/modules/auth.js"></script>
+  <script src="../assets/js/modules/sidebar.js"></script>
+  <script src="../assets/js/modules/toast.js"></script>
+  <script src="../assets/js/modules/validator.js"></script>
+  
+  <!-- Page Scripts -->
+  <script src="js/student.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

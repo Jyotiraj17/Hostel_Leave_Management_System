@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warden Management - HMS</title>
+  <link rel="stylesheet" href="../assets/css/hms-layout.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-page-title="Wardens">
+
+  <div class="app-layout">
+    <aside id="app-sidebar" class="sidebar"></aside>
+
+    <div class="main-wrapper">
+      <header id="app-topbar" class="topbar"></header>
+
+      <main class="content-body">
+        <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h1>Warden Management</h1>
+            <p>Register and manage hostel wardens and block assignments.</p>
+          </div>
+          <button class="btn btn-primary" id="open-add-warden-btn">
+            <i data-lucide="plus"></i> Add New Warden
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="user-check"></i> Registered Wardens</div>
+          </div>
+
+          <div id="wardens-container">
+            <div class="loading-spinner">
+              <p>Loading wardens list...</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Add Warden Modal -->
+  <div id="add-warden-modal" class="modal-backdrop">
+    <div class="modal-content" style="max-width: 550px;">
+      <div class="modal-header">
+        <div class="modal-title">Add New Warden</div>
+        <button class="modal-close" onclick="closeModal('add-warden-modal')">&times;</button>
+      </div>
+      <form id="add-warden-form" novalidate>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="add-w-fullName">Full Name *</label>
+            <input type="text" id="add-w-fullName" class="form-control" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="add-w-email">Email Address *</label>
+            <input type="email" id="add-w-email" class="form-control" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="add-w-password">Password (Optional - Default: Warden@123)</label>
+            <input type="password" id="add-w-password" class="form-control" placeholder="Warden@123" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="add-w-phone">Phone Number *</label>
+            <input type="text" id="add-w-phone" class="form-control" required />
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="add-w-hostel">Assigned Hostel</label>
+              <input type="text" id="add-w-hostel" class="form-control" placeholder="e.g. Boys Hostel A" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="add-w-block">Assigned Block</label>
+              <input type="text" id="add-w-block" class="form-control" placeholder="e.g. Block A" />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('add-warden-modal')">Cancel</button>
+          <button type="submit" id="save-warden-btn" class="btn btn-primary">Add Warden</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Warden Modal -->
+  <div id="edit-warden-modal" class="modal-backdrop">
+    <div class="modal-content" style="max-width: 550px;">
+      <div class="modal-header">
+        <div class="modal-title">Edit Warden Details</div>
+        <button class="modal-close" onclick="closeModal('edit-warden-modal')">&times;</button>
+      </div>
+      <form id="edit-warden-form" novalidate>
+        <input type="hidden" id="edit-warden-id" />
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="edit-w-fullName">Full Name</label>
+            <input type="text" id="edit-w-fullName" class="form-control" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="edit-w-phone">Phone Number</label>
+            <input type="text" id="edit-w-phone" class="form-control" required />
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="edit-w-hostel">Hostel</label>
+              <input type="text" id="edit-w-hostel" class="form-control" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="edit-w-block">Block</label>
+              <input type="text" id="edit-w-block" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="edit-w-status">Status</label>
+            <select id="edit-w-status" class="form-control">
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('edit-warden-modal')">Cancel</button>
+          <button type="submit" id="update-warden-btn" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../assets/js/modules/api.js"></script>
+  <script src="../assets/js/modules/auth.js"></script>
+  <script src="../assets/js/modules/sidebar.js"></script>
+  <script src="../assets/js/modules/toast.js"></script>
+  <script src="../assets/js/modules/validator.js"></script>
+  
+  <script src="js/admin.js"></script>
+  <script src="js/wardens.js"></script>
+
+  <script>
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('show');
+    }
+
+    document.getElementById('open-add-warden-btn').addEventListener('click', () => {
+      document.getElementById('add-warden-modal').classList.add('show');
+    });
+  </script>
+</body>
+</html>

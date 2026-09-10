@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complaints - HMS</title>
+  <link rel="stylesheet" href="../assets/css/hms-layout.css">
+  <link rel="stylesheet" href="css/student.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-page-title="Complaints">
+
+  <div class="app-layout">
+    <aside id="app-sidebar" class="sidebar"></aside>
+
+    <div class="main-wrapper">
+      <header id="app-topbar" class="topbar"></header>
+
+      <main class="content-body">
+        <div class="page-header">
+          <h1>Complaints & Maintenance</h1>
+          <p>Submit hostel issues and track resolution status.</p>
+        </div>
+
+        <!-- Submit Complaint Form -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i data-lucide="alert-triangle"></i> Submit a New Complaint</div>
+          </div>
+
+          <form id="complaint-form" novalidate>
+            <div class="form-grid">
+              
+              <div class="form-group">
+                <label class="form-label" for="category">Category *</label>
+                <select id="category" name="category" class="form-control" required>
+                  <option value="">Select Category</option>
+                  <option value="Electrical">Electrical</option>
+                  <option value="Plumbing">Plumbing</option>
+                  <option value="Cleaning">Cleaning</option>
+                  <option value="Wi-Fi/Internet">Wi-Fi / Internet</option>
+                  <option value="Food">Food</option>
+                  <option value="Room Maintenance">Room Maintenance</option>
+                  <option value="Furniture">Furniture</option>
+                  <option value="Security">Security</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="subject">Subject / Title *</label>
+                <input type="text" id="subject" name="subject" class="form-control" placeholder="Short description of the issue" required />
+              </div>
+
+              <div class="form-group" style="grid-column: 1 / -1;">
+                <label class="form-label" for="description">Detailed Description *</label>
+                <textarea id="description" name="description" class="form-control" rows="3" placeholder="Provide details about the location, issue, or urgency..." required></textarea>
+              </div>
+
+            </div>
+
+            <div style="margin-top: 1rem; text-align: right;">
+              <button type="submit" id="submit-complaint-btn" class="btn btn-primary">
+                <i data-lucide="send"></i>
+                <span>Submit Complaint</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Submitted Complaints List -->
+        <div class="card">
+          <div class="card-header" style="flex-wrap: wrap; gap: 1rem;">
+            <div class="card-title"><i data-lucide="list"></i> My Submitted Complaints</div>
+            
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button class="btn btn-primary btn-sm complaint-filter-btn" data-status="ALL">All</button>
+              <button class="btn btn-secondary btn-sm complaint-filter-btn" data-status="PENDING">Pending</button>
+              <button class="btn btn-secondary btn-sm complaint-filter-btn" data-status="IN_PROGRESS">In Progress</button>
+              <button class="btn btn-secondary btn-sm complaint-filter-btn" data-status="RESOLVED">Resolved</button>
+              <button class="btn btn-secondary btn-sm complaint-filter-btn" data-status="REJECTED">Rejected</button>
+            </div>
+          </div>
+
+          <div id="complaints-list-container">
+            <div class="loading-spinner">
+              <p>Loading complaints history...</p>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="../assets/js/modules/api.js"></script>
+  <script src="../assets/js/modules/auth.js"></script>
+  <script src="../assets/js/modules/sidebar.js"></script>
+  <script src="../assets/js/modules/toast.js"></script>
+  <script src="../assets/js/modules/validator.js"></script>
+  
+  <script src="js/student.js"></script>
+  <script src="js/complaints.js"></script>
+</body>
+</html>

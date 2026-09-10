@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leave History - HMS</title>
+  <link rel="stylesheet" href="../assets/css/hms-layout.css">
+  <link rel="stylesheet" href="css/student.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-page-title="Leave History">
+
+  <div class="app-layout">
+    <aside id="app-sidebar" class="sidebar"></aside>
+
+    <div class="main-wrapper">
+      <header id="app-topbar" class="topbar"></header>
+
+      <main class="content-body">
+        <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h1>Leave History</h1>
+            <p>Track status and history of your submitted leave applications.</p>
+          </div>
+          <a href="/student/apply-leave.html" class="btn btn-primary">
+            <i data-lucide="plus"></i> Apply New Leave
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="card-header" style="flex-wrap: wrap; gap: 1rem;">
+            <div class="card-title"><i data-lucide="clipboard-list"></i> My Leave Applications</div>
+            
+            <!-- Filter Bar -->
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button class="btn btn-primary btn-sm status-filter-btn" data-filter="ALL">All</button>
+              <button class="btn btn-secondary btn-sm status-filter-btn" data-filter="PENDING">Pending</button>
+              <button class="btn btn-secondary btn-sm status-filter-btn" data-filter="APPROVED">Approved</button>
+              <button class="btn btn-secondary btn-sm status-filter-btn" data-filter="REJECTED">Rejected</button>
+              <button class="btn btn-secondary btn-sm status-filter-btn" data-filter="CANCELLED">Cancelled</button>
+            </div>
+          </div>
+
+          <div id="leave-history-container">
+            <div class="loading-spinner">
+              <p>Loading leave records...</p>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="../assets/js/modules/api.js"></script>
+  <script src="../assets/js/modules/auth.js"></script>
+  <script src="../assets/js/modules/sidebar.js"></script>
+  <script src="../assets/js/modules/toast.js"></script>
+  <script src="../assets/js/modules/validator.js"></script>
+  
+  <script src="js/student.js"></script>
+  <script src="js/leaves.js"></script>
+</body>
+</html>
